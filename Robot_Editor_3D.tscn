@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://d1656xxh1awjp"]
+
+[ext_resource type="Script" path="res://RobotEditorBaseController.gd" id="1_g1l12"]
+[ext_resource type="Script" path="res://CameraPositionController.gd" id="1_owlhx"]
+[ext_resource type="Script" path="res://RobotConstructionController.gd" id="2_k3vuv"]
+[ext_resource type="Script" path="res://MainCameraController.gd" id="2_pbrvi"]
+[ext_resource type="Script" path="res://RobotPartController.gd" id="3_6ukep"]
+[ext_resource type="Material" uid="uid://wnh2cji2kvcs" path="res://GenericPartTex.tres" id="4_7l7vu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_knadm"]
+size = Vector3(0.02, 0.01, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xsixq"]
+material = ExtResource("4_7l7vu")
+size = Vector3(0.02, 0.01, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6wohm"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4m6h2"]
+material = SubResource("StandardMaterial3D_6wohm")
+radius = 0.025
+height = 0.05
+
+[node name="RobotEditorBase" type="Node3D"]
+script = ExtResource("1_g1l12")
+
+[node name="RobotConstruction" type="Node3D" parent="."]
+script = ExtResource("2_k3vuv")
+
+[node name="Origin" type="RigidBody3D" parent="RobotConstruction"]
+freeze = true
+script = ExtResource("3_6ukep")
+
+[node name="Collider" type="CollisionShape3D" parent="RobotConstruction/Origin"]
+shape = SubResource("BoxShape3D_knadm")
+
+[node name="VisMesh3D" type="MeshInstance3D" parent="RobotConstruction/Origin"]
+mesh = SubResource("BoxMesh_xsixq")
+
+[node name="CameraPositionController" type="Node3D" parent="."]
+script = ExtResource("1_owlhx")
+
+[node name="MainCamera" type="Camera3D" parent="CameraPositionController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+current = true
+size = 3.0
+near = 0.005
+script = ExtResource("2_pbrvi")
+
+[node name="RayCast3D" type="RayCast3D" parent="CameraPositionController/MainCamera"]
+target_position = Vector3(0, 0, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraPositionController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+visible = false
+mesh = SubResource("SphereMesh_4m6h2")
+skeleton = NodePath("../..")
+
+[node name="CeilingLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 10)
+omni_range = 40.0
+
+[node name="CeilingLight2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 10, 10)
+omni_range = 40.0
+
+[node name="CeilingLight3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 10, -10)
+omni_range = 40.0
+
+[node name="CeilingLight4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, -10)
+omni_range = 40.0
+
+[connection signal="update_camera_mode" from="." to="CameraPositionController/MainCamera" method="_on_robot_editor_base_update_camera_mode"]
+[connection signal="part_list_clear_all_attached" from="RobotConstruction" to="." method="_on_robot_construction_part_list_clear_all_attached"]
+[connection signal="part_list_update_items" from="RobotConstruction" to="." method="_on_robot_construction_part_list_update_items"]
+[connection signal="part_list_update_items" from="RobotConstruction" to="CameraPositionController" method="_on_robot_construction_part_list_update_items"]
+[connection signal="part_placed" from="CameraPositionController" to="RobotConstruction" method="_on_camera_position_controller_part_placed"]
+[connection signal="part_selected" from="CameraPositionController" to="." method="_on_camera_position_controller_part_selected"]

@@ -1,0 +1,471 @@
+[gd_scene load_steps=16 format=3 uid="uid://cf6qas4ns6ahe"]
+
+[ext_resource type="Script" path="res://UIController.gd" id="1_doa7a"]
+[ext_resource type="PackedScene" uid="uid://d1656xxh1awjp" path="res://Robot_Editor_3D.tscn" id="1_voywg"]
+[ext_resource type="Theme" uid="uid://c25wppt47ofr6" path="res://Main_UI.tres" id="3_8cmxh"]
+[ext_resource type="Script" path="res://CameraMode.gd" id="3_jpx1y"]
+[ext_resource type="Script" path="res://AttachedPartListController.gd" id="4_24t1m"]
+[ext_resource type="Script" path="res://PartListsContainerController.gd" id="5_oxarj"]
+[ext_resource type="Script" path="res://PartListModeController.gd" id="5_pmpqh"]
+[ext_resource type="Script" path="res://PlaceablePartsListController.gd" id="6_741hy"]
+[ext_resource type="Script" path="res://RotationFieldController.gd" id="9_1t3py"]
+[ext_resource type="Script" path="res://LoadButtonController.gd" id="9_8uo2j"]
+[ext_resource type="Script" path="res://SaveButtonController.gd" id="9_qhiv7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nf0rk"]
+
+[sub_resource type="Sky" id="Sky_xb6ka"]
+sky_material = SubResource("ProceduralSkyMaterial_nf0rk")
+
+[sub_resource type="Environment" id="Environment_xnngc"]
+background_mode = 2
+sky = SubResource("Sky_xb6ka")
+
+[sub_resource type="World3D" id="World3D_yp534"]
+environment = SubResource("Environment_xnngc")
+
+[node name="UIController" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_doa7a")
+metadata/_edit_lock_ = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+shortcut_context = NodePath("")
+stretch = true
+metadata/_edit_lock_ = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+world_3d = SubResource("World3D_yp534")
+handle_input_locally = false
+msaa_3d = 1
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="RobotEditorBase" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_voywg")]
+
+[node name="VFlowContainer2" type="VFlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -75.0
+offset_right = 656.0
+grow_vertical = 0
+size_flags_horizontal = 6
+
+[node name="CameraMode" type="Button" parent="VFlowContainer2"]
+custom_minimum_size = Vector2(150, 75)
+layout_mode = 2
+theme = ExtResource("3_8cmxh")
+disabled = true
+toggle_mode = true
+text = "Camera mode:
+Perspective"
+icon_alignment = 1
+script = ExtResource("3_jpx1y")
+
+[node name="VSeparator" type="VSeparator" parent="VFlowContainer2"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="PartListMode" type="Button" parent="VFlowContainer2"]
+custom_minimum_size = Vector2(150, 75)
+layout_mode = 2
+theme = ExtResource("3_8cmxh")
+text = "List mode:
+Attached"
+script = ExtResource("5_pmpqh")
+
+[node name="VSeparator2" type="VSeparator" parent="VFlowContainer2"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="PartHidden" type="Button" parent="VFlowContainer2"]
+custom_minimum_size = Vector2(150, 75)
+layout_mode = 2
+theme = ExtResource("3_8cmxh")
+disabled = true
+toggle_mode = true
+action_mode = 0
+text = "Hide part"
+
+[node name="VSeparator3" type="VSeparator" parent="VFlowContainer2"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Button4" type="Button" parent="VFlowContainer2"]
+custom_minimum_size = Vector2(150, 75)
+layout_mode = 2
+theme = ExtResource("3_8cmxh")
+
+[node name="PartListsContainer" type="HFlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -299.0
+offset_bottom = 171.0
+grow_horizontal = 0
+script = ExtResource("5_oxarj")
+
+[node name="AttachedPartList" type="ItemList" parent="PartListsContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_8cmxh")
+auto_height = true
+item_count = 1
+same_column_width = true
+fixed_column_width = 500
+item_0/text = ""
+script = ExtResource("4_24t1m")
+
+[node name="PlaceablePartsList" type="ItemList" parent="PartListsContainer"]
+visible = false
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_8cmxh")
+auto_height = true
+item_count = 1
+same_column_width = true
+fixed_column_width = 500
+item_0/text = ""
+script = ExtResource("6_741hy")
+
+[node name="MoveWidgetContainer" type="FlowContainer" parent="."]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -450.0
+offset_top = -106.0
+grow_horizontal = 0
+grow_vertical = 0
+vertical = true
+
+[node name="Position" type="FlowContainer" parent="MoveWidgetContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Pos: X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="X" type="SpinBox" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+min_value = -10.0
+max_value = 10.0
+step = 0.0
+editable = false
+custom_arrow_step = 0.1
+
+[node name="VSeparator" type="VSeparator" parent="MoveWidgetContainer/Position"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label2" type="Label" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Y"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Y" type="SpinBox" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+min_value = -10.0
+max_value = 10.0
+step = 0.0
+editable = false
+custom_arrow_step = 0.1
+
+[node name="VSeparator2" type="VSeparator" parent="MoveWidgetContainer/Position"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label3" type="Label" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Z"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Z" type="SpinBox" parent="MoveWidgetContainer/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+min_value = -10.0
+max_value = 10.0
+step = 0.0
+editable = false
+custom_arrow_step = 0.1
+
+[node name="VSeparator3" type="VSeparator" parent="MoveWidgetContainer/Position"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Rotation" type="FlowContainer" parent="MoveWidgetContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Rot: X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="X" type="SpinBox" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = -360.0
+max_value = 360.0
+step = 0.001
+editable = false
+custom_arrow_step = 1.0
+script = ExtResource("9_1t3py")
+
+[node name="VSeparator" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Y"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Y" type="SpinBox" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = -360.0
+max_value = 360.0
+step = 0.001
+editable = false
+custom_arrow_step = 1.0
+script = ExtResource("9_1t3py")
+
+[node name="VSeparator2" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Z"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Z" type="SpinBox" parent="MoveWidgetContainer/Rotation"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = -360.0
+max_value = 360.0
+step = 0.001
+editable = false
+custom_arrow_step = 1.0
+script = ExtResource("9_1t3py")
+
+[node name="VSeparator3" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Scale" type="FlowContainer" parent="MoveWidgetContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Scl: X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="X" type="SpinBox" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = 0.001
+max_value = 1000.0
+step = 0.001
+value = 1.0
+editable = false
+custom_arrow_step = 0.25
+
+[node name="VSeparator" type="VSeparator" parent="MoveWidgetContainer/Scale"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Y"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Y" type="SpinBox" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = 0.001
+max_value = 1000.0
+step = 0.001
+value = 1.0
+editable = false
+custom_arrow_step = 0.25
+
+[node name="VSeparator2" type="VSeparator" parent="MoveWidgetContainer/Scale"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_vertical = 6
+theme = ExtResource("3_8cmxh")
+text = "Z"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Z" type="SpinBox" parent="MoveWidgetContainer/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_8cmxh")
+min_value = 0.001
+max_value = 1000.0
+step = 0.001
+value = 1.0
+editable = false
+custom_arrow_step = 0.25
+
+[node name="VSeparator3" type="VSeparator" parent="MoveWidgetContainer/Scale"]
+light_mask = 0
+visibility_layer = 0
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="VFlowContainer" type="FlowContainer" parent="."]
+layout_mode = 1
+offset_right = 126.0
+offset_bottom = 31.0
+
+[node name="SaveButton" type="Button" parent="VFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+script = ExtResource("9_qhiv7")
+
+[node name="SaveFileDialog" type="FileDialog" parent="VFlowContainer/SaveButton"]
+access = 1
+root_subfolder = "bots/"
+filters = PackedStringArray("*.csvbot ; CSV Bot files")
+
+[node name="VSeparator" type="VSeparator" parent="VFlowContainer"]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="VFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load"
+script = ExtResource("9_8uo2j")
+
+[node name="LoadFileDialog" type="FileDialog" parent="VFlowContainer/LoadButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+root_subfolder = "bots/"
+filters = PackedStringArray("*.csvbot ; CSV Bot files")
+
+[connection signal="part_list_clear_all_attached" from="SubViewportContainer/SubViewport/RobotEditorBase" to="PartListsContainer/AttachedPartList" method="_on_robot_editor_base_part_list_clear_all_attached"]
+[connection signal="part_list_update_items" from="SubViewportContainer/SubViewport/RobotEditorBase" to="PartListsContainer/AttachedPartList" method="_on_robot_editor_base_part_list_update_items"]
+[connection signal="part_selected" from="SubViewportContainer/SubViewport/RobotEditorBase" to="." method="_on_robot_editor_base_part_selected"]
+[connection signal="parts_dict_ready" from="SubViewportContainer/SubViewport/RobotEditorBase" to="PartListsContainer/PlaceablePartsList" method="_on_robot_editor_base_parts_dict_ready"]
+[connection signal="update_camera_mode" from="VFlowContainer2/CameraMode" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_camera_mode_update_camera_mode"]
+[connection signal="cycle_parts_list" from="VFlowContainer2/PartListMode" to="." method="_on_part_list_mode_cycle_parts_list"]
+[connection signal="cycle_parts_list" from="VFlowContainer2/PartListMode" to="PartListsContainer" method="_on_part_list_mode_cycle_parts_list"]
+[connection signal="placeable_part_cleared" from="PartListsContainer" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_part_lists_container_placeable_part_cleared"]
+[connection signal="placeable_part_selected" from="PartListsContainer" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_part_lists_container_placeable_part_selected"]
+[connection signal="item_selected" from="PartListsContainer/AttachedPartList" to="." method="_on_attached_part_list_item_selected"]
+[connection signal="item_selected" from="PartListsContainer/PlaceablePartsList" to="PartListsContainer" method="_on_placeable_parts_list_item_selected"]
+[connection signal="value_changed" from="MoveWidgetContainer/Position/X" to="." method="_on_pos_x_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Position/Y" to="." method="_on_pos_y_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Position/Z" to="." method="_on_pos_z_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Rotation/X" to="." method="_on_rot_x_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Rotation/Y" to="." method="_on_rot_y_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Rotation/Z" to="." method="_on_rot_z_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Scale/X" to="." method="_on_scl_x_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Scale/Y" to="." method="_on_scl_y_value_changed"]
+[connection signal="value_changed" from="MoveWidgetContainer/Scale/Z" to="." method="_on_scl_z_value_changed"]
+[connection signal="file_selected" from="VFlowContainer/SaveButton/SaveFileDialog" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_save_file_dialog_file_selected"]
+[connection signal="file_selected" from="VFlowContainer/LoadButton/LoadFileDialog" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_load_file_dialog_file_selected"]

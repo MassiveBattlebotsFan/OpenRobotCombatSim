@@ -1,0 +1,134 @@
+[gd_scene load_steps=10 format=3 uid="uid://b72ibnilp65ws"]
+
+[ext_resource type="Script" path="res://RigidBody3D.gd" id="1_6t2cd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nwykj"]
+size = Vector3(100, 0.1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hi1hn"]
+albedo_color = Color(0.279967, 0.279967, 0.279967, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vsu34"]
+material = SubResource("StandardMaterial3D_hi1hn")
+size = Vector3(100, 0.1, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pgurk"]
+size = Vector3(2, 1, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u857g"]
+size = Vector3(2, 1, 4)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_billk"]
+bounce = 0.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y4a6c"]
+height = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dtagw"]
+height = 0.5
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_nwykj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_vsu34")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.06694, 0)
+mass = 100.0
+script = ExtResource("1_6t2cd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_pgurk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/CollisionShape3D"]
+mesh = SubResource("BoxMesh_u857g")
+skeleton = NodePath("../..")
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="RigidBody3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.9307, -0.114969, -1.5672)
+node_a = NodePath("..")
+node_b = NodePath("RigidBody3D2")
+motor/enable = true
+motor/target_velocity = 100.0
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="RigidBody3D/HingeJoint3D"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, -0.331386)
+mass = 20.0
+physics_material_override = SubResource("PhysicsMaterial_billk")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RigidBody3D/HingeJoint3D/RigidBody3D2"]
+shape = SubResource("CylinderShape3D_y4a6c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D/HingeJoint3D/RigidBody3D2/CollisionShape3D2"]
+mesh = SubResource("CylinderMesh_dtagw")
+skeleton = NodePath("")
+
+[node name="HingeJoint3D2" type="HingeJoint3D" parent="RigidBody3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.931, -0.115, -1.567)
+node_a = NodePath("..")
+node_b = NodePath("RigidBody3D2")
+motor/enable = true
+motor/target_velocity = -100.0
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="RigidBody3D/HingeJoint3D2"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, -0.331386)
+mass = 20.0
+physics_material_override = SubResource("PhysicsMaterial_billk")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RigidBody3D/HingeJoint3D2/RigidBody3D2"]
+shape = SubResource("CylinderShape3D_y4a6c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D/HingeJoint3D2/RigidBody3D2/CollisionShape3D2"]
+mesh = SubResource("CylinderMesh_dtagw")
+skeleton = NodePath("")
+
+[node name="HingeJoint3D3" type="HingeJoint3D" parent="RigidBody3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.931, -0.115, 1.567)
+node_a = NodePath("..")
+node_b = NodePath("RigidBody3D2")
+motor/enable = true
+motor/target_velocity = 100.0
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="RigidBody3D/HingeJoint3D3"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, -0.331386)
+mass = 20.0
+physics_material_override = SubResource("PhysicsMaterial_billk")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RigidBody3D/HingeJoint3D3/RigidBody3D2"]
+shape = SubResource("CylinderShape3D_y4a6c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D/HingeJoint3D3/RigidBody3D2/CollisionShape3D2"]
+mesh = SubResource("CylinderMesh_dtagw")
+skeleton = NodePath("")
+
+[node name="HingeJoint3D4" type="HingeJoint3D" parent="RigidBody3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.931, -0.115, 1.567)
+node_a = NodePath("..")
+node_b = NodePath("RigidBody3D2")
+motor/enable = true
+motor/target_velocity = -100.0
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="RigidBody3D/HingeJoint3D4"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, -0.331386)
+mass = 20.0
+physics_material_override = SubResource("PhysicsMaterial_billk")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RigidBody3D/HingeJoint3D4/RigidBody3D2"]
+shape = SubResource("CylinderShape3D_y4a6c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D/HingeJoint3D4/RigidBody3D2/CollisionShape3D2"]
+mesh = SubResource("CylinderMesh_dtagw")
+skeleton = NodePath("")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.842669, 0, 0.538433, 0, 1, 0, -0.538433, 0, 0.842669, 10.6114, 8.77617, 14.568)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.3967, 0)
+omni_range = 98.1963
+omni_attenuation = 0.017337
