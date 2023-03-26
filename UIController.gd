@@ -65,12 +65,12 @@ func init_selected_item(index):
 	rot_Y_field.editable = true
 	rot_Z_field.editable = true
 	
-	scl_X_field.set_value_no_signal(selected_node.scale.x)
-	scl_X_field.get_line_edit().text = str(round(selected_node.scale.x*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
-	scl_Y_field.set_value_no_signal(selected_node.scale.y)
-	scl_Y_field.get_line_edit().text = str(round(selected_node.scale.y*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
-	scl_Z_field.set_value_no_signal(selected_node.scale.z)
-	scl_Z_field.get_line_edit().text = str(round(selected_node.scale.z*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
+	scl_X_field.set_value_no_signal(selected_node.current_scale.x)
+	scl_X_field.get_line_edit().text = str(round(selected_node.current_scale.x*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
+	scl_Y_field.set_value_no_signal(selected_node.current_scale.y)
+	scl_Y_field.get_line_edit().text = str(round(selected_node.current_scale.y*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
+	scl_Z_field.set_value_no_signal(selected_node.current_scale.z)
+	scl_Z_field.get_line_edit().text = str(round(selected_node.current_scale.z*CustomDatatypes.VALUE_ROUND)/CustomDatatypes.VALUE_ROUND)
 	scl_X_field.editable = selected_node.properties["scalable"]
 	scl_Y_field.editable = selected_node.properties["scalable"]
 	scl_Z_field.editable = selected_node.properties["scalable"]

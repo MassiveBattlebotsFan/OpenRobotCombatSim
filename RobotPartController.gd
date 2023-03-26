@@ -1,4 +1,4 @@
-extends RigidBody3D
+extends Node3D
 
 @export var VisualMesh : MeshInstance3D = null
 @export var CollisionMesh : CollisionShape3D = null
@@ -10,11 +10,15 @@ extends RigidBody3D
 @export var children = []
 @export var local_position = Vector3.ZERO
 @export var local_rotation = Vector3.ZERO
-
+@export var current_scale = Vector3.ONE
 
 func update_local():
 	global_rotation_degrees = round(global_rotation_degrees * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
-	scale = round(scale * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
+	if VisualMesh != null:
+		current_scale = VisualMesh.scale
+		current_scale = round(current_scale * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
+		VisualMesh.scale = current_scale
+		CollisionMesh.scale = current_scale
 	if len(parents) > 0:
 		local_rotation = global_rotation_degrees - parents[0].global_rotation_degrees
 		local_position = global_position - parents[0].global_position
@@ -57,9 +61,7 @@ func update_rotation(updated_rot : Vector3, recursive : bool = true):
 	global_rotation = Vector3.ZERO
 	if recursive:
 		update_rotation_recursive(updated_rot, global_position, old_rot)
-	var old_scl = scale
 	global_rotation = updated_rot
-	scale_object_local(old_scl)
 	update_local_recursive()
 
 func update_rotation_recursive(updated_rot : Vector3, origin : Vector3, origin_rot : Vector3):
@@ -72,18 +74,16 @@ func update_rotation_recursive(updated_rot : Vector3, origin : Vector3, origin_r
 		#child.global_rotation = Vector3.ZERO
 		var diff_pos = child.global_position - origin
 		child.global_position = origin
-		var old_scl = child.scale
 		child.update_rotation_recursive(updated_rot, origin, origin_rot)
 		child.global_rotation = diff_rot + child.global_rotation
 		diff_pos = diff_pos.rotated(Vector3(1,0,0), diff_rot.x)
 		diff_pos = diff_pos.rotated(Vector3(0,1,0), diff_rot.y)
 		diff_pos = diff_pos.rotated(Vector3(0,0,1), diff_rot.z)
 		child.global_position = diff_pos + origin
-		child.scale_object_local(old_scl)
 
 func update_scale(updated_scl : Vector3):
-	scale = Vector3.ONE
-	scale_object_local(updated_scl)
+	current_scale = updated_scl
+	update_local()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

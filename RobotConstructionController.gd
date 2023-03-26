@@ -24,12 +24,11 @@ func _process(_delta):
 	pass
 
 func construct_part(mesh, mesh_name, part_title):
-	var new_part = RigidBody3D.new()
+	var new_part = Node3D.new()
 	var new_coll3d = CollisionShape3D.new()
 	var new_coll_mesh = ConcavePolygonShape3D.new()
 	var new_meshinstance3d = MeshInstance3D.new()
 	new_part.name = part_title
-	new_part.freeze = true
 	new_coll_mesh.set_faces(mesh[1])
 	new_coll3d.shape = new_coll_mesh
 	new_coll3d.name = "Collider"
@@ -58,7 +57,7 @@ func dump_construction_raw():
 	var dumped_data = {}
 	var children = get_children()
 	for child in children:
-		dumped_data[child.name] = [child.part_name, child.parents, child.children, child.global_position, child.global_rotation_degrees, child.scale]
+		dumped_data[child.name] = [child.part_name, child.parents, child.children, child.global_position, child.global_rotation_degrees, child.current_scale]
 	return dumped_data
 
 func dump_construction_csv():

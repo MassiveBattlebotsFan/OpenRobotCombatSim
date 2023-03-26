@@ -1,28 +1,28 @@
-[gd_scene load_steps=16 format=3 uid="uid://cf6qas4ns6ahe"]
+[gd_scene load_steps=16 format=3 uid="uid://dcdimw8k8f7gr"]
 
-[ext_resource type="Script" path="res://UIController.gd" id="1_doa7a"]
-[ext_resource type="PackedScene" uid="uid://d1656xxh1awjp" path="res://Robot_Editor_3D.tscn" id="1_voywg"]
-[ext_resource type="Theme" uid="uid://c25wppt47ofr6" path="res://Main_UI.tres" id="3_8cmxh"]
-[ext_resource type="Script" path="res://CameraMode.gd" id="3_jpx1y"]
-[ext_resource type="Script" path="res://AttachedPartListController.gd" id="4_24t1m"]
-[ext_resource type="Script" path="res://PartListsContainerController.gd" id="5_oxarj"]
-[ext_resource type="Script" path="res://PartListModeController.gd" id="5_pmpqh"]
-[ext_resource type="Script" path="res://PlaceablePartsListController.gd" id="6_741hy"]
-[ext_resource type="Script" path="res://RotationFieldController.gd" id="9_1t3py"]
-[ext_resource type="Script" path="res://LoadButtonController.gd" id="9_8uo2j"]
-[ext_resource type="Script" path="res://SaveButtonController.gd" id="9_qhiv7"]
+[ext_resource type="Script" path="res://UIController.gd" id="1_6jet6"]
+[ext_resource type="PackedScene" uid="uid://d1656xxh1awjp" path="res://Robot_Editor_3D.tscn" id="2_i2px8"]
+[ext_resource type="Theme" uid="uid://c25wppt47ofr6" path="res://Editor_UI.tres" id="3_ryxxo"]
+[ext_resource type="Script" path="res://CameraMode.gd" id="4_nw2m4"]
+[ext_resource type="Script" path="res://PartListModeController.gd" id="5_xg7e0"]
+[ext_resource type="Script" path="res://PartListsContainerController.gd" id="6_ckf3r"]
+[ext_resource type="Script" path="res://AttachedPartListController.gd" id="7_jqrbx"]
+[ext_resource type="Script" path="res://PlaceablePartsListController.gd" id="8_h8gtt"]
+[ext_resource type="Script" path="res://RotationFieldController.gd" id="9_g0hdw"]
+[ext_resource type="Script" path="res://SaveButtonController.gd" id="10_067xw"]
+[ext_resource type="Script" path="res://LoadButtonController.gd" id="11_6gsgb"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nf0rk"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wt0uy"]
 
 [sub_resource type="Sky" id="Sky_xb6ka"]
-sky_material = SubResource("ProceduralSkyMaterial_nf0rk")
+sky_material = SubResource("ProceduralSkyMaterial_wt0uy")
 
-[sub_resource type="Environment" id="Environment_xnngc"]
+[sub_resource type="Environment" id="Environment_1smji"]
 background_mode = 2
 sky = SubResource("Sky_xb6ka")
 
 [sub_resource type="World3D" id="World3D_yp534"]
-environment = SubResource("Environment_xnngc")
+environment = SubResource("Environment_1smji")
 
 [node name="UIController" type="Control"]
 layout_mode = 3
@@ -31,7 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_doa7a")
+script = ExtResource("1_6jet6")
 metadata/_edit_lock_ = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." node_paths=PackedStringArray("shortcut_context")]
@@ -53,7 +53,7 @@ msaa_3d = 1
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="RobotEditorBase" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_voywg")]
+[node name="RobotEditorBase" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_i2px8")]
 
 [node name="VFlowContainer2" type="VFlowContainer" parent="."]
 layout_mode = 1
@@ -68,13 +68,13 @@ size_flags_horizontal = 6
 [node name="CameraMode" type="Button" parent="VFlowContainer2"]
 custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 disabled = true
 toggle_mode = true
 text = "Camera mode:
 Perspective"
 icon_alignment = 1
-script = ExtResource("3_jpx1y")
+script = ExtResource("4_nw2m4")
 
 [node name="VSeparator" type="VSeparator" parent="VFlowContainer2"]
 light_mask = 0
@@ -85,10 +85,10 @@ layout_mode = 2
 [node name="PartListMode" type="Button" parent="VFlowContainer2"]
 custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "List mode:
 Attached"
-script = ExtResource("5_pmpqh")
+script = ExtResource("5_xg7e0")
 
 [node name="VSeparator2" type="VSeparator" parent="VFlowContainer2"]
 light_mask = 0
@@ -99,7 +99,7 @@ layout_mode = 2
 [node name="PartHidden" type="Button" parent="VFlowContainer2"]
 custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 disabled = true
 toggle_mode = true
 action_mode = 0
@@ -114,7 +114,7 @@ layout_mode = 2
 [node name="Button4" type="Button" parent="VFlowContainer2"]
 custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 
 [node name="PartListsContainer" type="HFlowContainer" parent="."]
 layout_mode = 1
@@ -122,34 +122,34 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -299.0
-offset_bottom = 171.0
+offset_bottom = 810.0
 grow_horizontal = 0
-script = ExtResource("5_oxarj")
+script = ExtResource("6_ckf3r")
 
 [node name="AttachedPartList" type="ItemList" parent="PartListsContainer"]
 clip_contents = false
+custom_minimum_size = Vector2(0, 810)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_8cmxh")
-auto_height = true
+theme = ExtResource("3_ryxxo")
 item_count = 1
 same_column_width = true
 fixed_column_width = 500
 item_0/text = ""
-script = ExtResource("4_24t1m")
+script = ExtResource("7_jqrbx")
 
 [node name="PlaceablePartsList" type="ItemList" parent="PartListsContainer"]
 visible = false
 clip_contents = false
+custom_minimum_size = Vector2(0, 810)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_8cmxh")
-auto_height = true
+theme = ExtResource("3_ryxxo")
 item_count = 1
 same_column_width = true
 fixed_column_width = 500
 item_0/text = ""
-script = ExtResource("6_741hy")
+script = ExtResource("8_h8gtt")
 
 [node name="MoveWidgetContainer" type="FlowContainer" parent="."]
 layout_direction = 2
@@ -173,7 +173,7 @@ size_flags_horizontal = 3
 [node name="Label" type="Label" parent="MoveWidgetContainer/Position"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Pos: X"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -182,7 +182,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -10.0
 max_value = 10.0
 step = 0.0
@@ -199,7 +199,7 @@ size_flags_vertical = 6
 [node name="Label2" type="Label" parent="MoveWidgetContainer/Position"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Y"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -208,7 +208,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -10.0
 max_value = 10.0
 step = 0.0
@@ -225,7 +225,7 @@ size_flags_vertical = 6
 [node name="Label3" type="Label" parent="MoveWidgetContainer/Position"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Z"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -234,7 +234,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -10.0
 max_value = 10.0
 step = 0.0
@@ -256,7 +256,7 @@ size_flags_horizontal = 3
 [node name="Label" type="Label" parent="MoveWidgetContainer/Rotation"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Rot: X"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -265,13 +265,13 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -360.0
 max_value = 360.0
 step = 0.001
 editable = false
 custom_arrow_step = 1.0
-script = ExtResource("9_1t3py")
+script = ExtResource("9_g0hdw")
 
 [node name="VSeparator" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
 light_mask = 0
@@ -282,7 +282,7 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="MoveWidgetContainer/Rotation"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Y"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -291,13 +291,13 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -360.0
 max_value = 360.0
 step = 0.001
 editable = false
 custom_arrow_step = 1.0
-script = ExtResource("9_1t3py")
+script = ExtResource("9_g0hdw")
 
 [node name="VSeparator2" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
 light_mask = 0
@@ -308,7 +308,7 @@ layout_mode = 2
 [node name="Label3" type="Label" parent="MoveWidgetContainer/Rotation"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Z"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -317,13 +317,13 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = -360.0
 max_value = 360.0
 step = 0.001
 editable = false
 custom_arrow_step = 1.0
-script = ExtResource("9_1t3py")
+script = ExtResource("9_g0hdw")
 
 [node name="VSeparator3" type="VSeparator" parent="MoveWidgetContainer/Rotation"]
 light_mask = 0
@@ -339,7 +339,7 @@ size_flags_horizontal = 3
 [node name="Label" type="Label" parent="MoveWidgetContainer/Scale"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Scl: X"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -348,7 +348,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = 0.001
 max_value = 1000.0
 step = 0.001
@@ -365,7 +365,7 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="MoveWidgetContainer/Scale"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Y"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -374,7 +374,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = 0.001
 max_value = 1000.0
 step = 0.001
@@ -391,7 +391,7 @@ layout_mode = 2
 [node name="Label3" type="Label" parent="MoveWidgetContainer/Scale"]
 layout_mode = 2
 size_flags_vertical = 6
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 text = "Z"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -400,7 +400,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_8cmxh")
+theme = ExtResource("3_ryxxo")
 min_value = 0.001
 max_value = 1000.0
 step = 0.001
@@ -423,7 +423,7 @@ offset_bottom = 31.0
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Save"
-script = ExtResource("9_qhiv7")
+script = ExtResource("10_067xw")
 
 [node name="SaveFileDialog" type="FileDialog" parent="VFlowContainer/SaveButton"]
 access = 1
@@ -437,7 +437,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Load"
-script = ExtResource("9_8uo2j")
+script = ExtResource("11_6gsgb")
 
 [node name="LoadFileDialog" type="FileDialog" parent="VFlowContainer/LoadButton"]
 title = "Open a File"

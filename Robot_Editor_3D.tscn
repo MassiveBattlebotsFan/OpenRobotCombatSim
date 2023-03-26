@@ -28,9 +28,10 @@ script = ExtResource("1_g1l12")
 [node name="RobotConstruction" type="Node3D" parent="."]
 script = ExtResource("2_k3vuv")
 
-[node name="Origin" type="RigidBody3D" parent="RobotConstruction"]
-freeze = true
+[node name="Origin" type="StaticBody3D" parent="RobotConstruction" node_paths=PackedStringArray("VisualMesh", "CollisionMesh")]
 script = ExtResource("3_6ukep")
+VisualMesh = NodePath("VisMesh3D")
+CollisionMesh = NodePath("Collider")
 
 [node name="Collider" type="CollisionShape3D" parent="RobotConstruction/Origin"]
 shape = SubResource("BoxShape3D_knadm")

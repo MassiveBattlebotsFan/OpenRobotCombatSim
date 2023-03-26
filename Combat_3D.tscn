@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://cek1oqy3swmx5"]
+
+[ext_resource type="Script" path="res://CombatBaseController.gd" id="1_2v0wr"]
+[ext_resource type="Script" path="res://RobotConstructionController.gd" id="1_mq4ao"]
+[ext_resource type="Script" path="res://RobotPartController.gd" id="3_4danp"]
+[ext_resource type="Material" uid="uid://wnh2cji2kvcs" path="res://GenericPartTex.tres" id="4_spd07"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rxoeq"]
+size = Vector3(0.02, 0.01, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qcngd"]
+material = ExtResource("4_spd07")
+size = Vector3(0.02, 0.01, 0.02)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2on75"]
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r8vix"]
+albedo_color = Color(0.4, 0.4, 0.4, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p3f0y"]
+material = SubResource("StandardMaterial3D_r8vix")
+size = Vector3(10, 0.1, 10)
+
+[node name="CombatBase" type="Node3D"]
+script = ExtResource("1_2v0wr")
+
+[node name="RobotConstruction" type="Node3D" parent="."]
+script = ExtResource("1_mq4ao")
+
+[node name="Origin" type="RigidBody3D" parent="RobotConstruction" node_paths=PackedStringArray("VisualMesh", "CollisionMesh")]
+script = ExtResource("3_4danp")
+VisualMesh = NodePath("VisMesh3D")
+CollisionMesh = NodePath("Collider")
+
+[node name="Collider" type="CollisionShape3D" parent="RobotConstruction/Origin"]
+shape = SubResource("BoxShape3D_rxoeq")
+
+[node name="VisMesh3D" type="MeshInstance3D" parent="RobotConstruction/Origin"]
+mesh = SubResource("BoxMesh_qcngd")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_2on75")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_p3f0y")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.882036, 0.471181, 0, -0.471181, 0.882036, 0, 1.64839, 3.29018)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+omni_range = 10.0
+omni_attenuation = 0.00296039
