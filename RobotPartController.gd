@@ -112,3 +112,5 @@ func propagate_part_deletion():
 		child.propagate_part_deletion()
 	if not prepare_delete():
 		printerr(self, " failed propagate_part_deletion")
+	if part_name != "None":
+		queue_free()

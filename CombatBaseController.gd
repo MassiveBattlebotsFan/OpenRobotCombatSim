@@ -10,7 +10,6 @@ func _ready():
 	boxmesh.size = Vector3(0.1,0.1,0.1)
 	parts_dict["Cube"] = [boxmesh.get_mesh_arrays(), boxmesh.get_faces()]"""
 	#print(parts_dict)
-	emit_signal("parts_dict_ready")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

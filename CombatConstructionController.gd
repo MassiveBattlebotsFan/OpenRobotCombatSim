@@ -114,9 +114,6 @@ func initialize_parts_from_csv(data):
 func reconstruct_from_csv(data):
 	var current_origin = Origin
 	current_origin.propagate_part_deletion()
-	for child in get_children():
-		if child != current_origin:
-			child.free()
 	update_children()
 	var initialized_parts = initialize_parts_from_csv(data)
 	for part in initialized_parts:
