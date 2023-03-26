@@ -24,24 +24,22 @@ func _process(_delta):
 	pass
 
 func construct_part(mesh, mesh_name, part_title):
-	var new_part = StaticBody3D.new()
-	var new_coll3d = CollisionShape3D.new()
+	var new_part = CollisionShape3D.new()
 	var new_coll_mesh = ConcavePolygonShape3D.new()
 	var new_meshinstance3d = MeshInstance3D.new()
-	new_part.name = part_title
 	new_coll_mesh.set_faces(mesh[1])
-	new_coll3d.shape = new_coll_mesh
-	new_coll3d.name = "Collider"
+	new_part.shape = new_coll_mesh
+	new_part.name = part_title
 	#new_coll3d.owner = new_part
 	new_meshinstance3d.mesh = mesh[0]
 	new_meshinstance3d.mesh.surface_set_material(0, part_generic_material)
 	new_meshinstance3d.name = "VisMesh3D"
 	#new_meshinstance3d.owner = new_part
-	new_coll3d.add_child(new_meshinstance3d)
-	new_part.add_child(new_coll3d)
+	new_part.add_child(new_meshinstance3d)
 	new_part.set_script(part_script)
 	new_part.part_name = mesh_name
 	new_part.properties["scalable"] = true
+	new_part.properties["is_combat"] = true
 	return new_part
 
 func _on_camera_position_controller_part_placed(hover_target):
@@ -87,7 +85,7 @@ func initialize_parts_from_csv(data):
 		if line == "":
 			continue
 		var split_line = line.split(",")
-		var pos = Vector3(float(split_line[2]),float(split_line[3]),float(split_line[4]))
+		var pos = Vector3(float(split_line[2]),float(split_line[3]),float(split_line[4])) + global_position
 		var rot = Vector3(deg_to_rad(float(split_line[5])/CustomDatatypes.VALUE_ROUND),deg_to_rad(float(split_line[6])/CustomDatatypes.VALUE_ROUND),deg_to_rad(float(split_line[7])/CustomDatatypes.VALUE_ROUND))
 		var scl = Vector3(float(split_line[8])/CustomDatatypes.VALUE_ROUND,float(split_line[9])/CustomDatatypes.VALUE_ROUND,float(split_line[10])/CustomDatatypes.VALUE_ROUND)
 		var parents = []
@@ -128,12 +126,13 @@ func reconstruct_from_csv(data):
 		for child in part["children"]:
 			print(child)
 			part["part"].children.push_back(initialized_parts.filter(func(dict): return dict["part"].name == child)[0]["part"])
-		if part["part"] != Origin:
-			add_child(part["part"])
-		#part["part"].hide()
 	for part in initialized_parts:
+		if part["part"] != current_origin:
+			current_origin.add_child(part["part"])
+		part["part"].hide()
 		part["part"].update_position(part["pos"])
 		part["part"].update_rotation(part["rot"], false)
 		part["part"].update_scale(part["scl"])
-		#part["part"].show()
+		part["part"].show()
 	update_children()
+	print(Origin.get_children())

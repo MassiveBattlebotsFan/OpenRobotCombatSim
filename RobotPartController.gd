@@ -6,7 +6,7 @@ extends Node3D
 @export_category("part_info")
 @export var part_name = "None"
 @export var parents = []
-@export var properties = {"scalable" : false, "is_motor" : false}
+@export var properties = {"scalable" : false, "is_motor" : false, "is_combat" : false}
 @export var children = []
 @export var local_position = Vector3.ZERO
 @export var local_rotation = Vector3.ZERO
@@ -15,16 +15,18 @@ extends Node3D
 func update_local():
 	global_rotation_degrees = round(global_rotation_degrees * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
 	if VisualMesh != null:
-		current_scale = VisualMesh.scale
 		current_scale = round(current_scale * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
-		VisualMesh.scale = current_scale
-		CollisionMesh.scale = current_scale
+		if properties["is_combat"]:
+			scale = current_scale
+		else:
+			VisualMesh.scale = current_scale
+			CollisionMesh.scale = current_scale
 	if len(parents) > 0:
 		local_rotation = global_rotation_degrees - parents[0].global_rotation_degrees
 		local_position = global_position - parents[0].global_position
-		local_position = local_position.rotated(Vector3(1,0,0), -parents[0].global_rotation.x)
 		local_position = local_position.rotated(Vector3(0,1,0), -parents[0].global_rotation.y)
 		local_position = local_position.rotated(Vector3(0,0,1), -parents[0].global_rotation.z)
+		local_position = local_position.rotated(Vector3(1,0,0), -parents[0].global_rotation.x)
 	else:
 		local_position = global_position
 		local_rotation = global_rotation_degrees
@@ -89,16 +91,21 @@ func update_scale(updated_scl : Vector3):
 func _ready():
 	print(parents)
 	print(get_children())
-	CollisionMesh = find_child("Collider", true, false)
-	print(CollisionMesh)
-	if CollisionMesh == null:
-		printerr("Warning: ", name, " failed to init CollisionMesh var")
-	VisualMesh = find_child("VisMesh3D", true, false)
+	if not properties["is_combat"]:
+		CollisionMesh = find_child("Collider", true, false)
+		print(CollisionMesh)
+		if CollisionMesh == null:
+			printerr("Warning: ", name, " failed to init CollisionMesh var")
+	else:
+		CollisionMesh = null
+		if part_name != "None":
+			VisualMesh = find_child("VisMesh3D", true, false)
 	print(VisualMesh)
 	if VisualMesh == null:
 		printerr("Warning: ", name, " failed to init VisualMesh var")
 	if len(parents) > 0:
 		update_position_recursive(parents[0].global_position)
+	print(properties)
 
 func propagate_part_deletion():
 	for child in children:

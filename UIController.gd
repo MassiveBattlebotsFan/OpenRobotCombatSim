@@ -164,7 +164,7 @@ func _on_scl_x_value_changed(value):
 	if selected_node.properties["scalable"] == false:
 		print("Warn: ", selected_node, " not scalable")
 		return
-	var updated_scl = selected_node.scale
+	var updated_scl = selected_node.current_scale
 	updated_scl.x = value
 	selected_node.update_scale(updated_scl)
 
@@ -176,7 +176,7 @@ func _on_scl_y_value_changed(value):
 	if selected_node.properties["scalable"] == false:
 		print("Warn: ", selected_node, " not scalable")
 		return
-	var updated_scl = selected_node.scale
+	var updated_scl = selected_node.current_scale
 	updated_scl.y = value
 	selected_node.update_scale(updated_scl)
 
@@ -188,7 +188,7 @@ func _on_scl_z_value_changed(value):
 	if selected_node.properties["scalable"] == false:
 		print("Warn: ", selected_node, " not scalable")
 		return
-	var updated_scl = selected_node.scale
+	var updated_scl = selected_node.current_scale
 	updated_scl.z = value
 	selected_node.update_scale(updated_scl)
 

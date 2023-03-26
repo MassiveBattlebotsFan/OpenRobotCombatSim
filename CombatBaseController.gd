@@ -99,3 +99,7 @@ func _on_load_file_dialog_file_selected(path):
 	var load_data = load_file.get_as_text(true).split("\n")
 	print(load_data)
 	RobotConstruction.reconstruct_from_csv(load_data)
+
+
+func _on_run_button_pressed():
+	RobotConstruction.Origin.freeze = false
