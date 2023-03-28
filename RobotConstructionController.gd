@@ -37,7 +37,7 @@ func construct_part(mesh, mesh_name, part_title):
 	new_meshinstance3d.mesh.surface_set_material(0, part_generic_material)
 	new_meshinstance3d.name = "VisMesh3D"
 	#new_meshinstance3d.owner = new_part
-	new_coll3d.add_child(new_meshinstance3d)
+	new_part.add_child(new_meshinstance3d)
 	new_part.add_child(new_coll3d)
 	new_part.set_script(part_script)
 	new_part.part_name = mesh_name
@@ -114,6 +114,7 @@ func initialize_parts_from_csv(data):
 	return initialized_parts
 
 func reconstruct_from_csv(data):
+	## Reconstructs CSV data into parts
 	var current_origin = Origin
 	current_origin.propagate_part_deletion()
 	#for child in get_children():

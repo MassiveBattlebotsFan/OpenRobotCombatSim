@@ -23,6 +23,23 @@ func _ready():
 func _process(_delta):
 	pass
 
+func construct_rigidbody_axle(part):
+	var new_rigidbody = RigidBody3D.new()
+	var new_hinge = HingeJoint3D.new()
+	part.parents.push_back(new_rigidbody)
+	new_rigidbody.add_child(part)
+	new_rigidbody.set_script(part_script)
+	new_rigidbody.part_name = part.name
+	new_rigidbody.properties["is_combat"] = true
+	new_hinge.name = "AxleHinge"
+	new_hinge.node_a = part
+	new_hinge.node_b = null
+	new_hinge.set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, 60)
+	new_hinge.set_param(HingeJoint3D.PARAM_LIMIT_RELAXATION, 2)
+	new_hinge.set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)
+	new_rigidbody.add_child(new_hinge)
+	return new_rigidbody
+
 func construct_part(mesh, mesh_name, part_title):
 	var new_part = CollisionShape3D.new()
 	var new_coll_mesh = ConcavePolygonShape3D.new()
@@ -40,6 +57,13 @@ func construct_part(mesh, mesh_name, part_title):
 	new_part.part_name = mesh_name
 	new_part.properties["scalable"] = true
 	new_part.properties["is_combat"] = true
+	if mesh[2]:
+		var axle_name = get_parent().constructed_motors[mesh_name]["config"]["axle"]
+		var axle = get_parent().constructed_motors[mesh_name]["meshes"].filter(func(arr): return arr[0] == axle_name)[0][1]
+		new_part.properties["scalable"] = false
+		new_part.properties["is_motor"] = true
+		new_part.properties["axle"] = construct_rigidbody_axle(construct_part([axle, axle.get_faces()], axle_name, part_title))
+		new_part.properties["axle"].parents.push_back(new_part)
 	return new_part
 
 func _on_camera_position_controller_part_placed(hover_target):
@@ -112,24 +136,41 @@ func initialize_parts_from_csv(data):
 	return initialized_parts
 
 func reconstruct_from_csv(data):
+	var origins = [[null, Origin]]
 	var current_origin = Origin
 	current_origin.propagate_part_deletion()
 	update_children()
 	var initialized_parts = initialize_parts_from_csv(data)
 	for part in initialized_parts:
+		if part["part"].properties["is_motor"]:
+			part["part"].children.push_back(part["part"].properties["axle"])
 		for parent in part["parents"]:
 			print(parent)
 			part["part"].parents.push_back(initialized_parts.filter(func(dict): return dict["part"].name == parent)[0]["part"])
 		for child in part["children"]:
 			print(child)
-			part["part"].children.push_back(initialized_parts.filter(func(dict): return dict["part"].name == child)[0]["part"])
+			if part["part"].properties["is_motor"]:
+				part["part"].properties["axle"].children.push_back(initialized_parts.filter(func(dict): return dict["part"].name == child)[0]["part"])
+			else:
+				part["part"].children.push_back(initialized_parts.filter(func(dict): return dict["part"].name == child)[0]["part"])
+		if part["part"].properties["is_motor"]:
+			origins.push_back([part, part["part"].properties["axle"]])
+		#part["part"].hide()
+		#part["part"].show()
+	Origin.assign_groups_recursive(0, origins)
+	for origin in origins:
+		if origin[1] == Origin:
+			continue
+		origin[1].get_child("AxleHinge").node_b = origin[0]["part"].get_parent()
+		origin[1].get_child("AxleHinge").global_position = origin[0]["pos"]
+		origin[1].get_child("AxleHinge").global_rotation = origin[0]["rot"]
+		add_child(origin[1])
 	for part in initialized_parts:
-		if part["part"] != current_origin:
-			current_origin.add_child(part["part"])
-		part["part"].hide()
+		if not part["part"] in origins:
+			origins[part["part"].properties["group"]][1].add_child(part["part"])
 		part["part"].update_position(part["pos"])
 		part["part"].update_rotation(part["rot"], false)
 		part["part"].update_scale(part["scl"])
-		part["part"].show()
 	update_children()
-	print(Origin.get_children())
+	for child in Origin.get_children():
+		print(child, ", ", child.properties["group"])

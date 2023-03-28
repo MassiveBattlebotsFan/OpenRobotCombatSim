@@ -6,7 +6,7 @@ extends Node3D
 @export_category("part_info")
 @export var part_name = "None"
 @export var parents = []
-@export var properties = {"scalable" : false, "is_motor" : false, "is_combat" : false}
+@export var properties = {"scalable" : false, "is_motor" : false, "is_combat" : false, "group" : 0, "axle" : null}
 @export var children = []
 @export var local_position = Vector3.ZERO
 @export var local_rotation = Vector3.ZERO
@@ -19,8 +19,11 @@ func update_local():
 		if properties["is_combat"]:
 			scale = current_scale
 		else:
-			VisualMesh.scale = current_scale
-			CollisionMesh.scale = current_scale
+			VisualMesh.scale = Vector3.ONE
+			CollisionMesh.scale = Vector3.ONE
+			VisualMesh.scale_object_local(current_scale)
+			CollisionMesh.scale_object_local(current_scale)
+			print(VisualMesh.scale, ", ", CollisionMesh.scale)
 	if len(parents) > 0:
 		local_rotation = global_rotation_degrees - parents[0].global_rotation_degrees
 		local_position = global_position - parents[0].global_position
@@ -91,15 +94,15 @@ func update_scale(updated_scl : Vector3):
 func _ready():
 	print(parents)
 	print(get_children())
-	if not properties["is_combat"]:
+	if properties["is_combat"]:
+		CollisionMesh = null
+	else:
 		CollisionMesh = find_child("Collider", true, false)
 		print(CollisionMesh)
 		if CollisionMesh == null:
 			printerr("Warning: ", name, " failed to init CollisionMesh var")
-	else:
-		CollisionMesh = null
-		if part_name != "None":
-			VisualMesh = find_child("VisMesh3D", true, false)
+	if part_name != "None":
+		VisualMesh = find_child("VisMesh3D", true, false)
 	print(VisualMesh)
 	if VisualMesh == null:
 		printerr("Warning: ", name, " failed to init VisualMesh var")
@@ -114,3 +117,9 @@ func propagate_part_deletion():
 		printerr(self, " failed propagate_part_deletion")
 	if part_name != "None":
 		queue_free()
+
+func assign_groups_recursive(group_id, origins):
+	properties["group"] = group_id
+	for child in children:
+		if !child in origins: child.assign_groups_recursive(group_id, origins)
+		else: child.assign_groups_recursive(origins.find(child), origins)
