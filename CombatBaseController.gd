@@ -101,4 +101,4 @@ func _on_load_file_dialog_file_selected(path):
 
 
 func _on_run_button_pressed():
-	RobotConstruction.Origin.freeze = false
+	pass

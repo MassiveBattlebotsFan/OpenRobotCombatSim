@@ -51,9 +51,10 @@ func prepare_delete():
 	else:
 		return false
 
-func update_position(updated_pos : Vector3):
+func update_position(updated_pos : Vector3, recursive = true):
 	update_position_recursive(updated_pos)
-	update_local_recursive()
+	if recursive:
+		update_local_recursive()
 
 func update_position_recursive(updated_pos : Vector3):
 	var diff = updated_pos - global_position
@@ -120,6 +121,12 @@ func propagate_part_deletion():
 
 func assign_groups_recursive(group_id, origins):
 	properties["group"] = group_id
+	print(self, " id: ", group_id)
 	for child in children:
-		if !child in origins: child.assign_groups_recursive(group_id, origins)
-		else: child.assign_groups_recursive(origins.find(child), origins)
+		if !self in origins: child.assign_groups_recursive(group_id, origins)
+		else: child.assign_groups_recursive(origins.find(self), origins)
+
+func get_distant_parent():
+	if len(parents) == 0:
+		return get_node(get_path())
+	return parents[0].get_distant_parent()

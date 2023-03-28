@@ -28,19 +28,6 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _input(event):
-	if event is InputEventKey and event.is_action_pressed("ui_graph_delete") and selected_node != null and PartListsContainer.active_part_list == CustomDatatypes.PartLists.PLACEABLE_PARTS:
-		print("delete_part")
-		#emit_signal("delete_selected_part", selected_node)
-		if selected_node == Origin:
-			print("Cannot delete Origin!")
-			return
-		if selected_node.prepare_delete():
-			selected_node.free()
-			RobotConstruction.update_children()
-		else:
-			printerr("hover_target failed to prepare for delete, aborting")
 
 func init_selected_item(index):
 	print("idx: ", index)
@@ -201,3 +188,17 @@ func _on_robot_editor_base_part_selected(node_reference):
 	part_list.select(idx)
 	init_selected_item(idx)
 
+
+
+func _on_delete_pressed():
+	if selected_node != null:
+		print("delete_part")
+		#emit_signal("delete_selected_part", selected_node)
+		if selected_node == Origin:
+			print("Cannot delete Origin!")
+			return
+			selected_node.free()
+		if selected_node.prepare_delete():
+			RobotConstruction.update_children()
+		else:
+			printerr("hover_target failed to prepare for delete, aborting")

@@ -111,10 +111,11 @@ visibility_layer = 0
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
-[node name="Button4" type="Button" parent="VFlowContainer2"]
+[node name="Delete" type="Button" parent="VFlowContainer2"]
 custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
 theme = ExtResource("3_ryxxo")
+text = "Delete"
 
 [node name="PartListsContainer" type="HFlowContainer" parent="."]
 layout_mode = 1
@@ -454,6 +455,7 @@ filters = PackedStringArray("*.csvbot ; CSV Bot files")
 [connection signal="update_camera_mode" from="VFlowContainer2/CameraMode" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_camera_mode_update_camera_mode"]
 [connection signal="cycle_parts_list" from="VFlowContainer2/PartListMode" to="." method="_on_part_list_mode_cycle_parts_list"]
 [connection signal="cycle_parts_list" from="VFlowContainer2/PartListMode" to="PartListsContainer" method="_on_part_list_mode_cycle_parts_list"]
+[connection signal="pressed" from="VFlowContainer2/Delete" to="." method="_on_delete_pressed"]
 [connection signal="placeable_part_cleared" from="PartListsContainer" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_part_lists_container_placeable_part_cleared"]
 [connection signal="placeable_part_selected" from="PartListsContainer" to="SubViewportContainer/SubViewport/RobotEditorBase" method="_on_part_lists_container_placeable_part_selected"]
 [connection signal="item_selected" from="PartListsContainer/AttachedPartList" to="." method="_on_attached_part_list_item_selected"]
