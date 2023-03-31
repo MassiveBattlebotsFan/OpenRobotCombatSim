@@ -203,6 +203,6 @@ func _on_load_file_dialog_file_selected(path):
 	RobotConstruction.reconstruct_from_csv(load_data)
 
 func _on_run_button_pressed():
-	print(RobotConstruction.get_children())
-	for origin in RobotConstruction.get_children():
-		origin.freeze = false
+	print(RobotConstruction.origins_just_parts)
+	for origin in RobotConstruction.origins_just_parts:
+		origin.properties["axle"].RigidBody.freeze = false

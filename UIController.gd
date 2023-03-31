@@ -197,8 +197,8 @@ func _on_delete_pressed():
 		if selected_node == Origin:
 			print("Cannot delete Origin!")
 			return
-			selected_node.free()
 		if selected_node.prepare_delete():
+			selected_node.free()
 			RobotConstruction.update_children()
 		else:
 			printerr("hover_target failed to prepare for delete, aborting")

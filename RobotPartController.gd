@@ -11,6 +11,7 @@ extends Node3D
 @export var local_position = Vector3.ZERO
 @export var local_rotation = Vector3.ZERO
 @export var current_scale = Vector3.ONE
+@export var RigidBody : RigidBody3D = null
 
 func update_local():
 	global_rotation_degrees = round(global_rotation_degrees * CustomDatatypes.VALUE_ROUND) / CustomDatatypes.VALUE_ROUND
@@ -52,9 +53,12 @@ func prepare_delete():
 		return false
 
 func update_position(updated_pos : Vector3, recursive = true):
-	update_position_recursive(updated_pos)
 	if recursive:
+		update_position_recursive(updated_pos)
 		update_local_recursive()
+	else:
+		global_position = updated_pos
+		update_local()
 
 func update_position_recursive(updated_pos : Vector3):
 	var diff = updated_pos - global_position
@@ -128,5 +132,9 @@ func assign_groups_recursive(group_id, origins):
 
 func get_distant_parent():
 	if len(parents) == 0:
+		print("get_distant_parent hit tree end at ", get_node(get_path()))
 		return get_node(get_path())
+	if parents[0].properties["is_motor"]:
+		print("get_distant_parent hit motor at ", parents[0].get_node(get_path()), " , current_node: ", get_node(get_path()))
+		return get_node(parents[0].properties["axle"].RigidBody.get_path())
 	return parents[0].get_distant_parent()
