@@ -8,6 +8,7 @@ signal part_list_clear_all_attached()
 @onready var Origin = $Origin
 @onready var part_script = preload("res://RobotPartController.gd")
 @onready var hinge_script = preload("res://RobotHingeController.gd")
+@onready var static_control_script = preload("res://StaticControlSystem.gd")
 @onready var part_generic_material = preload("res://GenericPartTex.tres")
 
 # Called when the node enters the scene tree for the first time.
@@ -39,6 +40,7 @@ func construct_rigidbody_axle(part, part_name, parent_name, thing_to_attach_to):
 	new_rigidbody.add_child(new_mesh)
 	new_rigidbody.set_script(part_script)
 	new_rigidbody.part_name = part_name
+	new_rigidbody.can_sleep = false
 	new_rigidbody.properties["is_combat"] = true
 	new_hinge.set_script(hinge_script)
 	new_hinge.RigidBody = new_rigidbody
@@ -58,13 +60,10 @@ func construct_part(mesh, mesh_name, part_title):
 	new_meshinstance3d.name = "VisMesh3D"
 	#new_meshinstance3d.owner = new_part
 	new_part.add_child(new_meshinstance3d)
-	new_part.set_script(part_script)
-	new_part.part_name = mesh_name
-	new_part.properties["scalable"] = true
-	new_part.properties["is_combat"] = true
-	if mesh[2]:
+	if mesh[2]: #if part is a motor
 		var axle_name = get_parent().constructed_motors[mesh_name]["config"]["axle"]
 		var axle = get_parent().constructed_motors[mesh_name]["meshes"].filter(func(arr): return arr[0] == axle_name)[0][1]
+		new_part.set_script(static_control_script)
 		new_part.properties["scalable"] = false
 		new_part.properties["is_motor"] = true
 		new_part.properties["axle"] = construct_rigidbody_axle(axle, axle_name, part_title, new_part)
@@ -72,6 +71,13 @@ func construct_part(mesh, mesh_name, part_title):
 		print("new_part.properties[\"axle\"]: ", new_part.properties["axle"])
 		new_part.properties["axle"].RigidBody.parents.push_back(new_part)
 		new_part.children.push_back(new_part.properties["axle"].RigidBody)
+		Origin.children_to_control.push_back(new_part) # subject to change when StaticController is rebuilt
+		new_part.control_type = CustomDatatypes.ControlTypes.TYPE_MOTOR
+	else:
+		new_part.set_script(part_script)
+		new_part.properties["scalable"] = true
+	new_part.part_name = mesh_name
+	new_part.properties["is_combat"] = true
 	return new_part
 
 func _on_camera_position_controller_part_placed(hover_target):
@@ -148,6 +154,7 @@ func reconstruct_from_csv(data):
 	origins_just_parts = []
 	var current_origin = Origin
 	Origin.RigidBody = Origin
+	Origin.control_type = CustomDatatypes.ControlTypes.TYPE_CONTROLLER
 	current_origin.propagate_part_deletion()
 	update_children()
 	var initialized_parts = initialize_parts_from_csv(data)
@@ -193,7 +200,7 @@ func reconstruct_from_csv(data):
 		origin["part"].properties["axle"].RigidBody.VisualMesh.global_rotation = origin["rot"]
 		origin["part"].properties["axle"].node_a = origin["part"].get_distant_parent().get_path()
 		origin["part"].properties["axle"].node_b = origin["part"].properties["axle"].RigidBody.get_path()
-		origin["part"].properties["axle"].set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, 6)
+		origin["part"].properties["axle"].set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, 0)
 		#new_hinge.set_param(HingeJoint3D.PARAM_LIMIT_RELAXATION, 2)
 		origin["part"].properties["axle"].exclude_nodes_from_collision = false
 		origin["part"].properties["axle"].set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)

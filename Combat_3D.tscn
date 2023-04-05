@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://RobotEditorBaseController.gd" id="1_hxula"]
 [ext_resource type="Script" path="res://CombatConstructionController.gd" id="2_jjfu4"]
-[ext_resource type="Script" path="res://RobotPartController.gd" id="3_4danp"]
+[ext_resource type="Script" path="res://StaticControlSystem.gd" id="3_migqd"]
 [ext_resource type="Script" path="res://CombatCameraController.gd" id="4_yseyg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2on75"]
@@ -25,8 +25,9 @@ script = ExtResource("2_jjfu4")
 [node name="Origin" type="RigidBody3D" parent="RobotConstruction" node_paths=PackedStringArray("VisualMesh", "CollisionMesh")]
 continuous_cd = true
 max_contacts_reported = 100
+can_sleep = false
 freeze = true
-script = ExtResource("3_4danp")
+script = ExtResource("3_migqd")
 VisualMesh = NodePath("")
 CollisionMesh = NodePath("")
 
